@@ -67,13 +67,6 @@ public class Analyser {
 
     }
 
-
-    /**
-     * 查看下一个 Token
-     *
-     * @return
-     * @throws TokenizeError
-     */
     private Token peek() throws TokenizeError {
         if (peekedToken == null) {
             peekedToken = tokenizer.nextToken();
@@ -81,12 +74,6 @@ public class Analyser {
         return peekedToken;
     }
 
-    /**
-     * 获取下一个 Token
-     *
-     * @return
-     * @throws TokenizeError
-     */
     private Token next() throws TokenizeError {
         if (peekedToken != null) {
             Token token = peekedToken;
@@ -98,25 +85,11 @@ public class Analyser {
         }
     }
 
-    /**
-     * 如果下一个 token 的类型是 tt，则返回 true
-     *
-     * @param tt
-     * @return
-     * @throws TokenizeError
-     */
     private boolean check(TokenType tt) throws TokenizeError {
         Token token = peek();
         return token.getTokenType() == tt;
     }
 
-    /**
-     * 如果下一个 token 的类型是 tt，则前进一个 token 并返回，否则抛出异常
-     *
-     * @param tt 类型
-     * @return 这个 token
-     * @throws CompileError 如果类型不匹配
-     */
     private Token expect(TokenType tt) throws CompileError {
         Token token = peek();
         if (token.getTokenType() == tt) {
@@ -130,7 +103,6 @@ public class Analyser {
         analyseProgram();
     }
 
-    //??改完了
     public void analyseProgram() throws CompileError {
         //程序结构
         //program -> decl_stmt* function*
@@ -179,7 +151,6 @@ public class Analyser {
         Gnum++;
     }
 
-    //??写完了
     /**声明语句*/
     private void analyseDeclStmt() throws CompileError {
         //decl_stmt -> let_decl_stmt | const_decl_stmt
@@ -191,7 +162,6 @@ public class Analyser {
         else Lnum++;
     }
 
-    //??改完了
     private void analyseLetDeclStmt() throws CompileError {
         //let_decl_stmt -> 'let' IDENT ':' ty ('=' expr)? ';'
         expect(TokenType.LET_KW);
@@ -236,7 +206,6 @@ public class Analyser {
         expect(TokenType.SEMICOLON);
     }
 
-    //??改完了
     private void analyseConstDeclStmt() throws CompileError {
         //const_decl_stmt -> 'const' IDENT ':' ty '=' expr ';'
         expect(TokenType.CONST_KW);
@@ -284,7 +253,6 @@ public class Analyser {
         instructionmap.add(ins);
     }
 
-    //??改完了
     /**类型系统*/
     private Token analyseTy() throws CompileError {
         //ty -> IDENT 只能是void和int和double
@@ -300,7 +268,6 @@ public class Analyser {
 
 
     /**函数声明*/
-    //??改完了
     private void analyseFunction() throws CompileError {
         //function -> 'fn' IDENT '(' function_param_list? ')' '->' ty block_stmt
         expect(TokenType.FN_KW);
@@ -365,7 +332,6 @@ public class Analyser {
         globalmap.add(global);
     }
 
-    //??改完了
     private List<Symbol> analyseFunctionParamList() throws CompileError {
         //function_param_list -> function_param (',' function_param)*
         List<Symbol> n=new ArrayList<>();
@@ -380,7 +346,6 @@ public class Analyser {
         return n;
     }
 
-    //??改完了
     private Symbol analyseFunctionParam(int paraid) throws CompileError {
         //function_param -> 'const'? IDENT ':' ty
         String type=" ";
@@ -406,17 +371,8 @@ public class Analyser {
         return param;
     }
 
-     //??改完了，减号
     /**表达式*/
     private String analyseExpr() throws CompileError {
-        //expr ->
-        //    | negate_expr
-        //    | assign_expr
-        //    | call_expr
-        //    | literal_expr
-        //    | ident_expr
-        //    | group_expr
-        //     (binary_operator expr||'as' ty)*
         String type="void";
         //减号开头，取反或者运算
         if(check(TokenType.MINUS)){
@@ -478,7 +434,6 @@ public class Analyser {
         return type;
     }
 
-    //??改完了
     /**运算符表达式*/
     private void analyseBinaryOperator(String type) throws CompileError {
         //binary_operator -> '+' | '-' | '*' | '/' | '==' | '!=' | '<' | '>' | '<=' | '>='
@@ -503,7 +458,6 @@ public class Analyser {
         else throw new AnalyzeError(ErrorCode.Break,peekedToken.getStartPos());
     }
 
-    //??改完了
     private String analyseOperatorExpr(String typeLeft) throws CompileError {
         //operator_expr -> expr binary_operator expr
         //消除左递归
@@ -514,7 +468,6 @@ public class Analyser {
         else throw new AnalyzeError(ErrorCode.Break,peekedToken.getStartPos());
     }
 
-    //??改完了
     /**取反表达式*/
     private String analyseNegateExpr() throws CompileError {
         //negate_expr -> '-' expr
@@ -526,7 +479,6 @@ public class Analyser {
         return type;
     }
 
-    //??改完了
     /**赋值表达式*/
     private String analyseAssignExpr(Symbol symbol,String typeLeft) throws CompileError {
         //assign_expr -> l_expr '=' expr
@@ -554,7 +506,6 @@ public class Analyser {
         else throw new AnalyzeError(ErrorCode.Break,peekedToken.getStartPos());
     }
 
-    //??改完了
     /**类型转换表达式*/
     private String analyseAsExpr(String typeL) throws CompileError {
         //as_expr -> expr 'as' ty
@@ -579,8 +530,6 @@ public class Analyser {
     }
 
     /**函数调用表达式*/
-    //参数
-    //??改完了
     private void analyseCallParamList(Symbol function) throws CompileError {
         //call_param_list -> expr (',' expr)*
         int position =0;
@@ -612,7 +561,6 @@ public class Analyser {
     }
 
     //调用
-    //??改完了
     private String analyseCallExpr(Symbol function,boolean ku) throws CompileError {
         //call_expr -> IDENT '(' call_param_list? ')'
         //IDENT判断过了
@@ -743,16 +691,7 @@ public class Analyser {
     }
 
     /**语句*/
-    //??改完了
     private void analyseStmt() throws CompileError {
-        //stmt ->
-        //      expr_stmt
-        //    | decl_stmt *
-        //    | if_stmt *
-        //    | while_stmt *
-        //    | return_stmt *
-        //    | block_stmt *
-        //    | empty_stmt *
         if(check(TokenType.IF_KW)) analyseIfStmt();
         else if(check(TokenType.WHILE_KW)) analyseWhileStmt();
         else if(check(TokenType.RETURN_KW)) analyseReturnStmt();
@@ -762,7 +701,6 @@ public class Analyser {
         else analyseExprStmt();
     }
 
-    //??改完了
     /**表达式语句*/
     private void analyseExprStmt() throws CompileError {
         //expr_stmt -> expr ';'
@@ -773,7 +711,6 @@ public class Analyser {
     }
 
     /**控制流语句*/
-    //??改了点
     private void analyseIfStmt() throws CompileError {
         //if_stmt -> 'if' expr block_stmt ('else' (block_stmt | if_stmt))?
         expect(TokenType.IF_KW);

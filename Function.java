@@ -27,44 +27,12 @@ public class Function {
         this.body=body;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getReturnSlots() {
-        return returnSlots;
-    }
-
-    public void setReturnSlots(int returnSlots) {
-        this.returnSlots = returnSlots;
-    }
-
     public int getParamSlots() {
         return paramSlots;
     }
 
-    public void setParamSlots(int paramSlots) {
-        this.paramSlots = paramSlots;
-    }
-
-    public int getLocalSlots() {
-        return localSlots;
-    }
-
-    public void setLocalSlots(int localSlots) {
-        this.localSlots = localSlots;
-    }
-
     public List<Instruction> getBody() {
         return body;
-    }
-
-    public void setBody(List<Instruction> body) {
-        this.body = body;
     }
 
     @Override

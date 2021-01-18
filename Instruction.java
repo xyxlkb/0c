@@ -36,10 +36,6 @@ public class Instruction {
         return opt;
     }
 
-    public void setOpt(Operation opt) {
-        this.opt = opt;
-    }
-
     public long getX() {
         return x;
     }
